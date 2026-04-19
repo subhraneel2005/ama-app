@@ -1,3 +1,5 @@
+import { insertSession } from "@/repositories/session.repository";
+import { insertUser } from "@/repositories/user.repository";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
@@ -49,15 +51,28 @@ export async function GET(req: NextRequest) {
       },
     );
 
-    const user = await userRes.json();
+    const googleUser = await userRes.json();
 
-    return NextResponse.json(
-      {
-        user,
-        success: true,
-      },
-      { status: 200 },
-    );
+    const dbUser = await insertUser({
+      username: googleUser.name,
+      avatarUrl: googleUser.picture,
+      email: googleUser.email,
+      googleOauthId: googleUser.id
+    })
+
+    const session = await insertSession(dbUser?.id!)
+
+    const res = NextResponse.redirect(`${process.env.BASE_URL}/ama`);
+
+    res.cookies.set("session", session.sessionToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "lax",
+      expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
+    })
+   
+    return res;
+
   } catch (error) {
     console.error("error at callback router", error);
     NextResponse.json({

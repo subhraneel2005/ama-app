@@ -8,6 +8,20 @@
       "when": 1776543310654,
       "tag": "0000_silly_lizard",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1776585048305,
+      "tag": "0001_useful_komodo",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1776606638558,
+      "tag": "0002_mature_metal_master",
+      "breakpoints": true
     }
   ]
 }
