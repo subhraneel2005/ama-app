@@ -6,10 +6,12 @@ interface RedirectResponse {
     error?: string
 }
 
+const BASE_URL = process.env.BASE_URL;
+
 export async function POST(req: NextRequest) {
   const GOOGLE_CALLABACK_URL = "https://accounts.google.com/o/oauth2/v2/auth";
   const GOOGLE_LOGIN_REDIRECT_URL =
-    "http://localhost:3000/api/auth/google/callback";
+    `${BASE_URL}/api/auth/google/callback`;
 
   try {
     const params = new URLSearchParams({
