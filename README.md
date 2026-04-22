@@ -7,3 +7,6 @@
 ## Connect to local db
 ` psql -U postgres `
 ` \c ama_app_db`
+
+## Content moderation design for this app
+![Content Moderation Design](https://raw.githubusercontent.com/subhraneel2005/ama-app/main/public/content-moderation-desing.png)

@@ -1,5 +1,5 @@
 import { InferInsertModel, InferSelectModel, relations } from "drizzle-orm";
-import { boolean, pgTable, text, timestamp, uuid, varchar } from "drizzle-orm/pg-core";
+import { boolean, pgTable, text, timestamp, uuid, varchar, decimal, integer } from "drizzle-orm/pg-core";
 
 export const userTable = pgTable("users", {
   id: uuid().primaryKey().defaultRandom(),
@@ -8,6 +8,8 @@ export const userTable = pgTable("users", {
   avatarUrl: text(),
   googleOauthId: text(),
   isShadowBanned: boolean().default(false),
+  IsBanned: boolean().default(false),
+  abuseCount: integer().default(0),
   deviceId: text(),
   createdAt: timestamp({ withTimezone: true }).defaultNow().notNull()
 });
@@ -29,6 +31,7 @@ export const amaTable = pgTable("ama", {
 export const questionTable = pgTable("question", {
   id: uuid().primaryKey().defaultRandom(),
   questionContent: text(),
+  score: decimal(),
   isSpam: boolean().default(false),
   askedBy: uuid().references(() => userTable.id), 
   amaId: uuid().references(() => amaTable.id),
