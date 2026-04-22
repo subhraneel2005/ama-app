@@ -1,23 +1,17 @@
-"use client"
-
 import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function Home() {
-
-
-  const googleLoginHandler = async() => {
-    const res = await fetch("/api/auth/google/login", { method: "POST"})
-
-    if(!res.ok) return
-
-    const { finalUrl } = await res.json()
-
-    window.location.href = finalUrl
-  }
   return (
     <div className="min-h-screen w-full justify-center items-center flex flex-col">
-      <Button onClick={googleLoginHandler}>Continue with Google</Button>
+      <div className="flex justify-center items-center w-full gap-4">
+      <Link href={"/ama"}>
+        <Button>Create AMA</Button>
+      </Link>
+      <Link href={"/login"}>
+        <Button>Login or Create an account</Button>
+      </Link>
+      </div>
     </div>
   );
 }
