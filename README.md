@@ -4,6 +4,9 @@
 ### main goal of this project is strong spam protection, abuse filtering, and safe anonymous interactions.
 
 
+#### Start postgres server
+` sudo -u postgres /Library/PostgreSQL/18/bin/pg_ctl -D /Library/PostgreSQL/18/data start `
+
 #### Connect to local db
 ` psql -U postgres `
 ` \c ama_app_db`
