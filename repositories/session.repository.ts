@@ -23,22 +23,38 @@ export const insertSession = async (userId: string) => {
   }
 };
 
-export const getSession = async () => {
-  const cookieStore = await cookies();
-  const sessionToken = cookieStore.get("session")?.value;
+type SessionResult =
+  | { type: "user"; user: User }
+  | { type: "dbError" }
+  | { type: "generalError" }
+  | { type: "noSession" };
 
-  if(!sessionToken) return;
+export const getSession = async (): Promise<SessionResult> => {
+  try {
+    const cookieStore = await cookies();
+    const sessionToken = cookieStore.get("session")?.value;
 
-const session = await db.query.userSessionTable.findFirst({
-    where: eq(userSessionTable.sessionToken, sessionToken),
-    with: {
-        user: true
+    if (!sessionToken) return { type: "noSession" };
+
+    const session = await db.query.userSessionTable.findFirst({
+      where: eq(userSessionTable.sessionToken, sessionToken),
+      with: {
+        user: true,
+      },
+    });
+
+    if (!session) return { type: "noSession" };
+
+    if (session.expiresAt < new Date()) return { type: "noSession" };
+
+    return { type: "user", user: session.user };
+  } catch (error: any) {
+    if (error?.cause?.code === "ECONNREFUSED") {
+      return {
+        type: "dbError",
+      };
     }
-})
-
-if(!session) return null;
-
-if(session.expiresAt < new Date()) return null
-
-return session.user
+    console.error(error);
+    return { type: "generalError" };
+  }
 };
