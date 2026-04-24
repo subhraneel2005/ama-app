@@ -33,6 +33,7 @@ export async function moderationHandler({ text, deviceId }: UserTextProps) {
 
     const finObj = {
       message: "moderation completed",
+      userText: text,
       flaggedCategories,
       scores: res.scores,
     };
@@ -44,5 +45,5 @@ export async function moderationHandler({ text, deviceId }: UserTextProps) {
 }
 
 moderationHandler({
-  text: "Is it normal to feel angry at someone who insulted you publicly?",
+  text: `i lobeee u`,
 });
