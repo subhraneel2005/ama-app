@@ -58,3 +58,20 @@ export const getSession = async (): Promise<SessionResult> => {
     return { type: "generalError" };
   }
 };
+
+export const deleteSession = async () => {
+  try {
+    const cookieStore = await cookies();
+    const sessionToken = cookieStore.get("session")?.value;
+
+    if (!sessionToken) return false;
+
+    await db
+      .delete(userSessionTable)
+      .where(eq(userSessionTable.sessionToken, sessionToken));
+    return true;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+};

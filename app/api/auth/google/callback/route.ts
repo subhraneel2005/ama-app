@@ -52,12 +52,13 @@ export async function GET(req: NextRequest) {
     );
 
     const googleUser = await userRes.json();
+    
 
     const dbUser = await insertUser({
       username: googleUser.name,
       avatarUrl: googleUser.picture,
       email: googleUser.email,
-      googleOauthId: googleUser.id
+      googleOauthId: googleUser.id,
     })
 
     const session = await insertSession(dbUser?.id!)

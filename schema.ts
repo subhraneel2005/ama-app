@@ -6,7 +6,6 @@ import {
   timestamp,
   uuid,
   varchar,
-  decimal,
   integer,
   pgEnum,
   jsonb,
@@ -21,7 +20,6 @@ export const userTable = pgTable("users", {
   isShadowBanned: boolean().default(false),
   IsBanned: boolean().default(false),
   abuseCount: integer().default(0),
-  deviceId: text(),
   createdAt: timestamp({ withTimezone: true }).defaultNow().notNull(),
 });
 

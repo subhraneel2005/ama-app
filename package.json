@@ -13,6 +13,7 @@
     "db:studio": "npx drizzle-kit studio --host=0.0.0.0 --port=8080 --config=drizzle-config.ts"
   },
   "dependencies": {
+    "@fingerprintjs/fingerprintjs": "^5.2.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "dotenv": "^17.4.2",
