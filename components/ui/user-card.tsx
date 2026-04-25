@@ -1,36 +1,31 @@
 "use client";
 
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { User } from "@/schema";
-import { deleteSession } from "@/repositories/session.repository";
 import { useState } from "react";
 import { Button } from "./button";
 import { logout } from "@/app/actions/session.action";
 import { useRouter } from "next/navigation";
 
-export default function UserCard(user: User) {
+export default function UserTopbar(user: User) {
   const fallback = user.username?.slice(0, 2).toUpperCase() ?? "U";
 
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
-  const router = useRouter()
+
+  const router = useRouter();
 
   const handleLogout = async () => {
     setLoading(true);
+
     try {
       const deleted = await logout();
 
       if (!deleted) {
-        setErrorMessage("Session not deleted.\nPlease try again");
+        setErrorMessage("Session not deleted. Please try again");
       }
-      router.push("/login")
+
+      router.push("/login");
     } catch (error: any) {
       setErrorMessage(error);
     } finally {
@@ -39,60 +34,37 @@ export default function UserCard(user: User) {
   };
 
   return (
-    <Card className="w-[400px]">
-      <CardHeader className="flex flex-row items-center gap-4">
+    <nav className="w-full border-b px-6 py-3 flex items-center justify-between">
+      <div className="flex items-center gap-3">
         <Avatar>
           {user.avatarUrl && <AvatarImage src={user.avatarUrl} />}
           <AvatarFallback>{fallback}</AvatarFallback>
         </Avatar>
 
-        {errorMessage?.length > 0 && (
-          <span className="text-red-500 bg-red-200 px-4 py-2 rounded-lg">
-            {errorMessage}
-          </span>
-        )}
-        <div>
-          {user.username && <CardTitle>{user.username}</CardTitle>}
+        <div className="leading-tight">
+          {user.username && (
+            <p className="font-semibold tracking-tight">{user.username}</p>
+          )}
           {user.email && (
             <p className="text-sm text-muted-foreground">{user.email}</p>
           )}
         </div>
-      </CardHeader>
+      </div>
 
-      <CardContent className="flex flex-col gap-2 text-sm">
-        {user.abuseCount !== undefined && (
-          <p>
-            <strong>Abuse Count:</strong> {user.abuseCount}
-          </p>
+      <div className="flex items-center gap-4">
+        {errorMessage && (
+          <span className="text-red-500 text-sm">{errorMessage}</span>
         )}
 
-        {user.isShadowBanned && (
-          <p className="text-yellow-600">
-            <strong>Shadow Banned</strong>
-          </p>
-        )}
-
-        {user.IsBanned && (
-          <p className="text-red-600">
-            <strong>Banned</strong>
-          </p>
-        )}
-
-        {user.createdAt && (
-          <p>
-            <strong>Joined:</strong> {user.createdAt.toDateString()}
-          </p>
-        )}
-      </CardContent>
-      <CardFooter>
         <Button
-          variant={"destructive"}
+          variant="destructive"
+          size="sm"
           disabled={loading}
           onClick={handleLogout}
         >
           {loading ? "Please wait..." : "Logout"}
         </Button>
-      </CardFooter>
-    </Card>
+      </div>
+    </nav>
   );
 }

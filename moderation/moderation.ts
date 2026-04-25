@@ -45,5 +45,5 @@ export async function moderationHandler({ text, deviceId }: UserTextProps) {
 }
 
 moderationHandler({
-  text: `i lobeee u`,
+  text: `hey wassap`,
 });

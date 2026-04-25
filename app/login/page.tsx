@@ -27,11 +27,17 @@ export default function LoginPage() {
   };
   return (
     <div className="min-h-screen w-full justify-center items-center flex flex-col space-y-6">
-       {errorMessage && (
+      {errorMessage && (
         <div className="text-red-500 bg-red-200 px-4 py-2 rounded-lg">
           {errorMessage}
         </div>
       )}
+      <h1 className="text-primary text-6xl tracking-tighter mb-1 font-bold">
+        Login or Create Account
+      </h1>
+      <p className="text-muted-foreground tracking-tighter text-xl mb-6">
+        Sign in with Google to start receiving anonymous questions and messages.
+      </p>
       <Button onClick={googleLoginHandler}>Continue with Google</Button>
     </div>
   );
