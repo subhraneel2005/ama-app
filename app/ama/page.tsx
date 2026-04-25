@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import UserTopbar from "@/components/ui/user-card";
 import { getSession } from "@/repositories/session.repository";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import React from "react";
 
@@ -54,8 +55,13 @@ export default async function AMAScreen() {
 
         <Card className="w-[500px] py-12 mt-6">
           <CardContent className="flex flex-col gap-3">
-            <Input placeholder="add ama title..." className="border border-primary" />
-            <Button className="mt-6">Preview</Button>
+            <Input
+              placeholder="add ama title..."
+              className="border border-primary"
+            />
+            <Link href="/ama/ama-1/preview" className="w-full mt-6">
+              <Button className="w-full">Preview</Button>
+            </Link>
             <Button>Create!</Button>
           </CardContent>
         </Card>
