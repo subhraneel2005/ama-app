@@ -1,13 +1,21 @@
 import { insertAma } from "@/repositories/ama.repository";
 import { getSession } from "@/repositories/session.repository";
+import { nanoid } from "nanoid"
 
 interface NewAmaProps {
   title: string;
-  link: string;
 }
 
-export async function createAma({ title, link }: NewAmaProps) {
+const baseUrl = process.env.BASE_URL
+
+export async function createAma({ title }: NewAmaProps) {
   try {
+
+    if(!baseUrl){
+        return {
+            message: "no base url found, cannot continue ama creation process."
+        }
+    }
     if (!title.trim()) {
       return {
         message: "no title provided",
@@ -22,9 +30,14 @@ export async function createAma({ title, link }: NewAmaProps) {
 
     const user = result.user;
 
+    const publicId = nanoid(8)
+
+    const link = `${baseUrl}/${user.username?.toLowerCase()}/ama/${publicId}`
+
     const newAma = await insertAma({
       title,
       link,
+      publicId,
       ownerId: user.id,
     });
 

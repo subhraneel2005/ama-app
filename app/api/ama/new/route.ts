@@ -4,12 +4,12 @@ import { NextRequest, NextResponse } from "next/server";
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { title, link } = body;
+    const { title } = body;
 
-    if (!title || !link) {
+    if (!title) {
       return NextResponse.json(
         {
-          message: "missing body",
+          message: "missing title",
         },
         {
           status: 400,
@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const newAma = await createAma({title, link})
+    const newAma = await createAma({ title })
 
     return NextResponse.json({
         data: newAma,

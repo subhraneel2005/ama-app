@@ -34,6 +34,7 @@ export const userSessionTable = pgTable("session", {
 
 export const amaTable = pgTable("ama", {
   id: uuid().primaryKey().defaultRandom(),
+  publicId: varchar({ length: 8 }).notNull().unique(),
   title: text(),
   link: varchar({ length: 255 }),
   ownerId: uuid().references(() => userTable.id),
