@@ -82,9 +82,26 @@ export const questionTable = pgTable("question", {
   moderationCat: moderationEnum().default("SAFE"),
 
   isSpam: boolean().default(false),
-  askedBy: uuid().references(() => userTable.id),
+  actorId: uuid().references(() => actorTable.id),
   amaId: uuid().references(() => amaTable.id),
+
+  createdAt: timestamp({ withTimezone: true }).defaultNow()
 });
+
+export const actorTable = pgTable("actor", {
+  id: uuid().primaryKey().defaultRandom(),
+  userId: uuid().references(() => userTable.id),
+  anonId: varchar({ length: 64 }),
+  ipHash: varchar({ length: 128 }),
+  deviceID: text(),
+
+  abuseCount: integer().default(0),
+  reportCount: integer().default(0),
+  isBanned: boolean().default(false),
+
+  lastMessagedAt: timestamp({ withTimezone: true }),
+  createdAt: timestamp({ withTimezone: true }).defaultNow()
+})
 
 export const userRelations = relations(userTable, ({ many }) => ({
   amas: many(amaTable),
@@ -108,9 +125,9 @@ export const amaRelations = relations(amaTable, ({ one, many }) => ({
 }));
 
 export const questionRelations = relations(questionTable, ({ one }) => ({
-  askedByUser: one(userTable, {
-    fields: [questionTable.askedBy],
-    references: [userTable.id],
+  actorId: one(actorTable, {
+    fields: [questionTable.actorId],
+    references: [actorTable.id],
   }),
   ama: one(amaTable, {
     fields: [questionTable.amaId],
@@ -119,8 +136,14 @@ export const questionRelations = relations(questionTable, ({ one }) => ({
 }));
 
 export type Moderation = (typeof moderationEnum.enumValues)[number];
+
 export type User = InferSelectModel<typeof userTable>;
 export type NewUser = InferInsertModel<typeof userTable>;
+
 export type Session = InferInsertModel<typeof userSessionTable>;
+
 export type NewAma = InferInsertModel<typeof amaTable>
 export type Ama = InferSelectModel<typeof amaTable>
+
+export type NewActor = InferInsertModel<typeof actorTable>
+export type Actor = InferSelectModel<typeof actorTable>
