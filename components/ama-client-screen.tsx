@@ -8,6 +8,7 @@ import Link from "next/link";
 import { Card, CardContent } from "./ui/card";
 import { Button } from "./ui/button";
 import { createAma } from "@/services/ama.service";
+import { useRouter } from "next/navigation";
 
 export default function AmaClientScreen({
   username,
@@ -17,6 +18,8 @@ export default function AmaClientScreen({
   const [amaTitle, setAmaTitle] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const router = useRouter()
 
   const ceateAmaHandler = async () => {
     if (amaTitle.trim().length === 0) {
@@ -44,10 +47,11 @@ export default function AmaClientScreen({
         return;
       }
 
-      console.log("new ama created: ", data.data);
+      console.log("new ama created: ", data.data.data);
 
-      // redirect to the new AMA page
-      // window.location.href = `/ama/${data.data.publicId}`
+      const publicId = data.data.data.publicId
+
+      router.push(`/ask/${username.toLowerCase()}/${publicId}`)
     } catch (err) {
       setError("Something went wrong");
     } finally {

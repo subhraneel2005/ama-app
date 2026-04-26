@@ -5,6 +5,7 @@ export default function AmaPreviewPage() {
   const previewProps = {
     username: "subhraneel1970",
     amaTitle: "yoo gng ask me anything :)",
+    isOwner: false
   };
   return (
     <div>

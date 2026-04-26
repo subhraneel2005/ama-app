@@ -123,3 +123,4 @@ export type User = InferSelectModel<typeof userTable>;
 export type NewUser = InferInsertModel<typeof userTable>;
 export type Session = InferInsertModel<typeof userSessionTable>;
 export type NewAma = InferInsertModel<typeof amaTable>
+export type Ama = InferSelectModel<typeof amaTable>
