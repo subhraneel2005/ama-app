@@ -36,6 +36,13 @@
       "when": 1777192009394,
       "tag": "0004_legal_red_wolf",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1777216940945,
+      "tag": "0005_bitter_lord_hawal",
+      "breakpoints": true
     }
   ]
 }
