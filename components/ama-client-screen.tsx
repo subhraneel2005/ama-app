@@ -3,12 +3,12 @@
 import { User } from "@/schema";
 import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
-import UserTopbar from "@/components/ui/user-card";
+import UserTopbar, { UserCardProps } from "@/components/ui/user-card";
 import Link from "next/link";
 import { Card, CardContent } from "./ui/card";
 import { Button } from "./ui/button";
 
-export default function AmaClientScreen(user: User) {
+export default function AmaClientScreen({ username, avatarUrl, email }: UserCardProps) {
   const [amaTitle, setAmaTitle] = useState("");
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
@@ -16,7 +16,7 @@ export default function AmaClientScreen(user: User) {
   
   return (
     <div className="min-h-screen w-full flex flex-col">
-      <UserTopbar {...user} />
+      <UserTopbar username={username} avatarUrl={avatarUrl} email={email}/>
 
       <div className="flex-1 flex flex-col items-center justify-center space-y-6">
         <h1 className="text-primary text-6xl tracking-tighter mb-1 font-bold">

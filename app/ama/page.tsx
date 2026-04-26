@@ -1,4 +1,5 @@
 import AmaClientScreen from "@/components/ama-client-screen";
+import ErrorCard from "@/components/error-card";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getSession } from "@/repositories/session.repository";
 import { redirect } from "next/navigation";
@@ -8,27 +9,13 @@ export default async function AMAScreen() {
 
   if (result.type === "dbError") {
     return (
-      <div className="min-h-screen w-full justify-center items-center flex">
-        <Card className="w-[400px] text-center">
-          <CardHeader>
-            <CardTitle>Database Offline</CardTitle>
-          </CardHeader>
-          <CardContent>Cannot connect to database.</CardContent>
-        </Card>
-      </div>
+      <ErrorCard title="Database Offline" message="Cannot connect to database." />
     );
   }
 
   if (result.type === "generalError") {
     return (
-      <div className="flex h-screen items-center justify-center">
-        <Card className="w-[400px] text-center">
-          <CardHeader>
-            <CardTitle>Server Error</CardTitle>
-          </CardHeader>
-          <CardContent>Something went wrong.</CardContent>
-        </Card>
-      </div>
+      <ErrorCard title="Server Error" message="Something went wrong." />
     );
   }
 
@@ -37,6 +24,6 @@ export default async function AMAScreen() {
   const user = result.user;
 
   return (
-    <AmaClientScreen {...user}/>
+    <AmaClientScreen username={user.username!} avatarUrl={user.avatarUrl!} email={user.email!}/>
   );
 }

@@ -7,8 +7,14 @@ import { Button } from "./button";
 import { logout } from "@/app/actions/session.action";
 import { useRouter } from "next/navigation";
 
-export default function UserTopbar(user: User) {
-  const fallback = user.username?.slice(0, 2).toUpperCase() ?? "U";
+ export interface UserCardProps {
+  username: string,
+  avatarUrl: string,
+  email: string,
+}
+
+export default function UserTopbar({ username, avatarUrl, email }: UserCardProps) {
+  const fallback = username?.slice(0, 2).toUpperCase() ?? "U";
 
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
@@ -37,16 +43,16 @@ export default function UserTopbar(user: User) {
     <nav className="w-full border-b px-6 py-3 flex items-center justify-between">
       <div className="flex items-center gap-3">
         <Avatar>
-          {user.avatarUrl && <AvatarImage src={user.avatarUrl} />}
+          {avatarUrl && <AvatarImage src={avatarUrl} />}
           <AvatarFallback>{fallback}</AvatarFallback>
         </Avatar>
 
         <div className="leading-tight">
-          {user.username && (
-            <p className="font-semibold tracking-tight">{user.username}</p>
+          {username && (
+            <p className="font-semibold tracking-tight">{username}</p>
           )}
-          {user.email && (
-            <p className="text-sm text-muted-foreground">{user.email}</p>
+          {email && (
+            <p className="text-sm text-muted-foreground">{email}</p>
           )}
         </div>
       </div>
