@@ -9,6 +9,11 @@ import { Send } from "lucide-react";
 import Link from "next/link";
 import { getDeviceAndIp } from "@/lib/get-device-and-ip";
 import { createIpHash } from "@/lib/create-ip-hash";
+import {
+  checkActiveActor,
+  getActorFromCookies,
+} from "@/app/actions/actor.action";
+import { getSession } from "@/repositories/session.repository";
 
 interface AmaPageProps {
   username: string;
@@ -42,13 +47,24 @@ export default function AmaPage({
     }, 2000);
   };
 
-const handleAskQuestion = async() => {
-  const { deviceID, ip } = await getDeviceAndIp()
-  const ipHash = await createIpHash(ip)
-  console.log("device id: ", deviceID)
-  console.log("ip: ", ip)
-  console.log("ipHash: ", ipHash)
-}
+  const handleSend = async () => {
+    const { deviceID, ip } = await getDeviceAndIp();
+    const ipHash = await createIpHash(ip);
+    console.log("device id: ", deviceID);
+    console.log("ip: ", ip);
+    console.log("ipHash: ", ipHash);
+
+    const isActiveActor = await checkActiveActor();
+
+    if (isActiveActor) {
+      const actor = await getActorFromCookies();
+
+      // one db function i need to update actor abuseCount field if moderation module have a bad score
+      // one db function i need to create a questions table with actorID as i already have the actor
+    }
+
+    // if no actor then create one
+  };
 
   return (
     <div className="min-h-screen bg-background flex flex-col items-center py-12 px-4 transition-all">
@@ -89,18 +105,21 @@ const handleAskQuestion = async() => {
               🎲
             </Button>
             {message.length > 0 && !isOwner && (
-              <Button onClick={handleAskQuestion} className="rounded-full bg-primary hover:bg-primary/90 font-semibold">
+              <Button
+                onClick={handleSend}
+                className="rounded-full bg-primary hover:bg-primary/90 font-semibold"
+              >
                 Send <Send className="h-4 w-4" />
               </Button>
             )}
           </div>
         </CardContent>
         {isOwner && link && (
-         <CardFooter>
+          <CardFooter>
             <Button onClick={handleCopy} className="mt-4">
               {copied ? "Copied link!" : "Share link"}
             </Button>
-         </CardFooter>
+          </CardFooter>
         )}
       </Card>
 
