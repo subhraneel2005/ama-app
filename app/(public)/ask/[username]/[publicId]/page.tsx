@@ -25,10 +25,10 @@ export default async function AmaPublicPage({ params }: AmaSinglePageProps){
 
     if(session.type === "user" && session.user.id === ama.ownerId){
         isOwner = true
-        avatarUrl = session.user.avatarUrl!
+        avatarUrl = session?.user?.avatarUrl!
     }
 
 return(
-    <AmaPage amaTitle={ama.title!} isOwner={isOwner} username={username} avatarUrl={avatarUrl} link={ama.link!}/>
+    <AmaPage amaTitle={ama.title!} isOwner={isOwner} username={username} avatarUrl={avatarUrl} link={ama.link!} publicId={publicId}/>
 )
 }

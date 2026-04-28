@@ -82,6 +82,7 @@ export const questionTable = pgTable("question", {
   moderationCat: moderationEnum().default("SAFE"),
 
   isSpam: boolean().default(false),
+  isAbuse: boolean().default(false),
   actorId: uuid().references(() => actorTable.id),
   amaId: uuid().references(() => amaTable.id),
 
@@ -147,3 +148,6 @@ export type Ama = InferSelectModel<typeof amaTable>
 
 export type NewActor = InferInsertModel<typeof actorTable>
 export type Actor = InferSelectModel<typeof actorTable>
+
+export type NewQuestion = InferInsertModel<typeof questionTable>
+export type Question = InferSelectModel<typeof questionTable>

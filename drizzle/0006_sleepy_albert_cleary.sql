@@ -1,0 +1,1 @@
+ALTER TABLE "question" ADD COLUMN "isAbuse" boolean DEFAULT false;

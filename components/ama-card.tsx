@@ -17,6 +17,7 @@ interface AmaPageProps {
   amaTitle: string;
   link?: string;
   isOwner: boolean;
+  publicId?: string;
 }
 
 export default function AmaPage({
@@ -25,6 +26,7 @@ export default function AmaPage({
   amaTitle,
   link,
   isOwner,
+  publicId
 }: AmaPageProps) {
   const [isFocused, setIsFocused] = useState(false);
   const [message, setMessage] = useState("");
@@ -50,44 +52,51 @@ export default function AmaPage({
     console.log("ip: ", ip);
     console.log("ipHash: ", ipHash);
 
-
     const res = await fetch("/api/actor/update", {
-      method: "POST"
-    })
-    
-    const actorResult = await res.json()
+      method: "POST",
+    });
 
-      if(actorResult.success === false && actorResult.reason === "no actor found"){
-        // no actor found which means, getActor() already checked with both sessionToken and anonId in the cookies
-        // and haven't found any actor in the database so here we need to create a new actor using the createActor() service
+    const actorResult = await res.json();
 
-        const createRes = await fetch("/api/actor/create", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            deviceID,
-            ipHash
-          })
-        })
+    if (
+      actorResult.success === false &&
+      actorResult.reason === "no actor found"
+    ) {
 
-        const newActor = await createRes.json()
+      // no actor found which means, getActor() already checked with both sessionToken and anonId in the cookies
+      // and haven't found any actor in the database so here we need to create a new actor using the createActor() service
 
-        if(createRes.status === 201 && newActor.success){
-          console.log("new actor created successfully", newActor.actor);
-        }
-        else{
-          console.error("failed to create actor");
-        }
+      const createRes = await fetch("/api/actor/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          deviceID,
+          ipHash,
+        }),
+      });
+
+      const newActor = await createRes.json();
+
+      if (createRes.status === 201 && newActor.success) {
+        console.log("new actor created successfully", newActor.actor);
+      } else {
+        console.error("failed to create actor");
       }
-      
+    }
 
-      // one db function i need to update actor abuseCount field if moderation module have a bad score
-      // one db function i need to create a questions table with actorID as i already have the actor
-    
+    const newQuestionRes = await fetch("/api/question/create", {
+      method: "POST",
+      body: JSON.stringify({
+        questionContent: message,
+        amaPublicId: publicId
+      })
+    })
 
-    // if no actor then create one
+    const result = await newQuestionRes.json();
+
+  console.log(result);
   };
 
   return (
