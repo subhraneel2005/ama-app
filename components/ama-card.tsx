@@ -7,6 +7,8 @@ import { Textarea } from "./ui/textarea";
 import { Button } from "./ui/button";
 import { Send } from "lucide-react";
 import Link from "next/link";
+import { getDeviceAndIp } from "@/lib/get-device-and-ip";
+import { createIpHash } from "@/lib/create-ip-hash";
 
 interface AmaPageProps {
   username: string;
@@ -40,6 +42,13 @@ export default function AmaPage({
     }, 2000);
   };
 
+const handleAskQuestion = async() => {
+  const { deviceID, ip } = await getDeviceAndIp()
+  const ipHash = await createIpHash(ip)
+  console.log("device id: ", deviceID)
+  console.log("ip: ", ip)
+  console.log("ipHash: ", ipHash)
+}
 
   return (
     <div className="min-h-screen bg-background flex flex-col items-center py-12 px-4 transition-all">
@@ -80,7 +89,7 @@ export default function AmaPage({
               🎲
             </Button>
             {message.length > 0 && !isOwner && (
-              <Button className="rounded-full bg-primary hover:bg-primary/90 font-semibold">
+              <Button onClick={handleAskQuestion} className="rounded-full bg-primary hover:bg-primary/90 font-semibold">
                 Send <Send className="h-4 w-4" />
               </Button>
             )}

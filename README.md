@@ -24,3 +24,9 @@ or
 
 ## Content moderation design for this app
 ![Content Moderation Design](https://raw.githubusercontent.com/subhraneel2005/ama-app/main/public/content-moderation-desing.png)
+
+## Inbox design for this app
+![Inbox design](https://raw.githubusercontent.com/subhraneel2005/ama-app/main/public/inbox-design.png)
+
+## After user asks a question to a ama
+![OnClick Send design](https://raw.githubusercontent.com/subhraneel2005/ama-app/main/public/onClick-send-design.png)
