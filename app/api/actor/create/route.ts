@@ -1,17 +1,23 @@
-import { createActor } from "@/services/actor.service";
+import { createActorService } from "@/services/actor.service";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
   const { deviceID, ipHash } = await req.json();
   try {
 
-    const result = await createActor({
+    const result = await createActorService({
         deviceID,
         ipHash
     })
 
+    if (!result?.data) {
+      return NextResponse.json(
+        { success: false, message: "actor creation failed" },
+        { status: 500 }
+      );
+    }
 
-    const res = NextResponse.json({ success: true, actor: result.data });
+    const res = NextResponse.json({ success: true, actor: result.data }, { status: 201 });
 
    if(result.anonId){
     res.cookies.set("anonId", result.anonId, {

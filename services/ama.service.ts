@@ -32,7 +32,7 @@ export async function createAma({ title }: NewAmaProps) {
 
     const publicId = nanoid(8)
 
-    const link = `${baseUrl}/${user.username?.toLowerCase()}/ama/${publicId}`
+    const link = `${baseUrl}/ask/${user.username?.toLowerCase()}/${publicId}`
 
     const newAma = await insertAma({
       title,
