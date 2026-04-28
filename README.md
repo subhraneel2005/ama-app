@@ -23,7 +23,10 @@ or
  ` ps aux | grep postgres `
 
 ## Content moderation design for this app
-![Content Moderation Design](https://raw.githubusercontent.com/subhraneel2005/ama-app/main/public/content-moderation-desing.png)
+![Content Moderation Design](https://raw.githubusercontent.com/subhraneel2005/ama-app/main/public/content-moderation-desing-1.png)
+
+## Tracking anon user activities
+![Tracking anon user activities Design](https://raw.githubusercontent.com/subhraneel2005/ama-app/main/public/anon-desing.png)
 
 ## Inbox design for this app
 ![Inbox design](https://raw.githubusercontent.com/subhraneel2005/ama-app/main/public/inbox-design.png)
