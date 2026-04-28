@@ -7,8 +7,6 @@ import { Moderation, Question } from "@/schema";
 interface QuestionServiceProps {
   questionContent: string;
   amaPublicId: string;
-  isSpam?: boolean;
-  isAbuse?: boolean
 }
 
 type CreateQuestionResult =
@@ -22,8 +20,6 @@ type CreateQuestionResult =
 
 export async function createQuestionService({
   questionContent,
-  isSpam,
-  isAbuse,
   amaPublicId,
 }: QuestionServiceProps): Promise<CreateQuestionResult> {
   try {
