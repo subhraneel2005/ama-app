@@ -21,15 +21,6 @@ export async function createActor({ deviceID, ipHash }: CreateActorProps){
 
         const anonId = session.type === "user" ? null :  crypto.randomUUID();
 
-        const res = new NextResponse()
-
-        // res.cookies.set("anonId", anonId, {
-        //     httpOnly: true,
-        //     sameSite: "lax",
-        //     secure: true,
-        //     expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 365) , // 1year
-        // })  -----> Route handler (/api/actor/create/route.ts) will set the cookies and return it
-
         const newActor = await insertActor({
             userId: user ? user.id : null,
             deviceID,
