@@ -7,7 +7,7 @@ interface AmaSinglePageProps {
         publicId: string,
         username: string
     }>
-}
+}[]
 
 export default async function AmaPublicPage({ params }: AmaSinglePageProps){
 

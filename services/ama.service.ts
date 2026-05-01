@@ -1,4 +1,4 @@
-import { getAmaByPublicId, insertAma } from "@/repositories/ama.repository";
+import { getAmaByPublicId, getAmaWithQuestionsByPublicId, insertAma } from "@/repositories/ama.repository";
 import { getSession } from "@/repositories/session.repository";
 import { Ama } from "@/schema";
 import { nanoid } from "nanoid";
@@ -62,7 +62,7 @@ type GetAmaByPublicIdResult =
   | { success: false; reason: "ama not found" }
   | { success: true; reason: "ama found"; ama: Ama };
 
-export async function getAmaByPublicIdService(
+export async function getAmaWithQuestionsByPublicIdService(
   publicId: string,
 ): Promise<GetAmaByPublicIdResult> {
   try {
@@ -73,7 +73,7 @@ export async function getAmaByPublicIdService(
       };
     }
 
-    const ama = await getAmaByPublicId(publicId);
+    const ama = await getAmaWithQuestionsByPublicId(publicId);
 
     if (!ama) {
       return {

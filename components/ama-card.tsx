@@ -9,7 +9,7 @@ import { Send } from "lucide-react";
 import Link from "next/link";
 import { getDeviceAndIp } from "@/lib/get-device-and-ip";
 import { createIpHash } from "@/lib/create-ip-hash";
-import { updateActorService } from "@/services/actor.service";
+import { useRouter } from "next/navigation";
 
 interface AmaPageProps {
   username: string;
@@ -26,7 +26,7 @@ export default function AmaPage({
   amaTitle,
   link,
   isOwner,
-  publicId
+  publicId,
 }: AmaPageProps) {
   const [isFocused, setIsFocused] = useState(false);
   const [message, setMessage] = useState("");
@@ -62,7 +62,6 @@ export default function AmaPage({
       actorResult.success === false &&
       actorResult.reason === "no actor found"
     ) {
-
       // no actor found which means, getActor() already checked with both sessionToken and anonId in the cookies
       // and haven't found any actor in the database so here we need to create a new actor using the createActor() service
 
@@ -90,14 +89,18 @@ export default function AmaPage({
       method: "POST",
       body: JSON.stringify({
         questionContent: message,
-        amaPublicId: publicId
-      })
-    })
+        amaPublicId: publicId,
+      }),
+    });
 
     const result = await newQuestionRes.json();
 
-  console.log(result);
+    console.log(result);
   };
+
+  const router = useRouter();
+
+  const inboxUrl = `/ama/${username}/${publicId}/inbox`;
 
   return (
     <div className="min-h-screen bg-background flex flex-col items-center py-12 px-4 transition-all">
@@ -147,13 +150,16 @@ export default function AmaPage({
             )}
           </div>
         </CardContent>
-        {isOwner && link && (
-          <CardFooter>
-            <Button onClick={handleCopy} className="mt-4">
+        <CardFooter className="flex gap-4 items-center justify-start mt-4">
+          {isOwner && (
+            <Button onClick={() => router.push(inboxUrl)}>Check Inbox</Button>
+          )}
+          {isOwner && link && (
+            <Button onClick={handleCopy}>
               {copied ? "Copied link!" : "Share link"}
             </Button>
-          </CardFooter>
-        )}
+          )}
+        </CardFooter>
       </Card>
 
       <p className="text-sm text-muted-foreground mt-6">🔒 anonymous q&a</p>
