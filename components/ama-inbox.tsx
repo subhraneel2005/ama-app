@@ -5,6 +5,7 @@ import { Badge } from "./ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { cn } from "@/lib/utils";
 import { Separator } from "./ui/separator";
+import QuestionCard from "./question-card";
 
 export default function AmaInboxComp({
   ama,
@@ -14,58 +15,34 @@ export default function AmaInboxComp({
   username: string;
 }) {
   return (
-    <div className="p-6 max-w-4xl mx-auto space-y-6 w-full">
-    {/* header */}
-    <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center justify-between">
-          <span>{ama.title}</span>
-          <Badge variant="secondary">
-            {ama.questions?.length ?? 0} questions
-          </Badge>
-        </CardTitle>
-        <p className="text-sm text-muted-foreground">@{username}</p>
-      </CardHeader>
-    </Card>
+    <div className="p-6 max-w-xl mx-auto space-y-6 w-full">
+      {/* header */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center justify-between">
+            <span>{ama.title}</span>
+            <Badge variant="secondary">
+              {ama.questions?.length ?? 0} questions
+            </Badge>
+          </CardTitle>
+          <p className="text-sm text-muted-foreground">@{username}</p>
+        </CardHeader>
+      </Card>
 
-    {/* questions */}
-    <div className="space-y-4">
-      {ama.questions?.length === 0 ? (
-        <Card>
-          <CardContent className="py-6 text-center text-muted-foreground">
-            no questions yet
-          </CardContent>
-        </Card>
-      ) : (
-        ama.questions?.map((q, i) => (
-          <Card
-            key={q.id}
-            className={cn(
-              "transition-all",
-              "hover:shadow-md hover:-translate-y-px"
-            )}
-          >
-            <CardContent className="py-4 space-y-3">
-              <p className="text-sm leading-relaxed">
-                {q.questionContent}
-              </p>
-
-              <Separator />
-
-              <div className="flex items-center justify-between text-xs text-muted-foreground">
-                <span>
-                  {new Date(q.createdAt!).toLocaleString()}
-                </span>
-
-                {q.isSpam && (
-                  <Badge variant="destructive">spam</Badge>
-                )}
-              </div>
+      {/* questions */}
+      <div className="space-y-4">
+        {ama.questions?.length === 0 ? (
+          <Card>
+            <CardContent className="py-6 text-center text-muted-foreground">
+              no questions yet
             </CardContent>
           </Card>
-        ))
-      )}
+        ) : (
+          ama.questions?.map((q) => (
+            <QuestionCard key={q.id} question={q} amaTitle={ama.title} />
+          ))
+        )}
+      </div>
     </div>
-  </div>
   );
 }
