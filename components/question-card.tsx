@@ -2,6 +2,10 @@
 
 import { Question, Ama } from "@/schema";
 import { cn } from "@/lib/utils";
+import { useRef } from "react";
+import { toPng } from "html-to-image";
+import { Button } from "./ui/button";
+import { Copy } from "lucide-react";
 
 export default function QuestionCard({
   question,
@@ -10,23 +14,57 @@ export default function QuestionCard({
   question: Question;
   amaTitle?: string | null;
 }) {
-  return (
-    <div
-      className={cn(
-        "w-full rounded-2xl overflow-hidden shadow-sm border",
-        "bg-neutral-200"
-      )}
-    >
-      {/* top (black strip) */}
-      <div className="bg-primary text-black text-center py-3 text-sm font-bold tracking-tight">
-        {amaTitle || "Ask me a question"}
-      </div>
+  const ref = useRef<HTMLDivElement>(null);
 
-      {/* bottom (question) */}
-      <div className="px-6 py-8 text-center">
-        <p className="text-lg md:text-xl font-semibold text-black leading-snug">
-          {question.questionContent}
-        </p>
+  const handleCopy = async () => {
+    if (!ref.current) return;
+
+    try {
+      const dataUrl = await toPng(ref.current, {
+        cacheBust: true,
+        pixelRatio: 2,
+      });
+
+      const blob = await (await fetch(dataUrl)).blob();
+
+      await navigator.clipboard.write([
+        new ClipboardItem({
+          [blob.type]: blob,
+        }),
+      ]);
+    } catch (err) {
+      console.error("copy failed", err);
+    }
+  };
+
+  return (
+    <div className="relative w-full">
+      <Button
+        size="icon-sm"
+        variant="ghost"
+        className="absolute right-2 top-2 z-10 p-2"
+        onClick={handleCopy}
+      >
+        <Copy className="w-4 h-4" />
+      </Button>
+
+      <div
+        ref={ref}
+        className={cn(
+          "w-full rounded-2xl overflow-hidden shadow-sm border bg-neutral-200",
+        )}
+      >
+        {/* top */}
+        <div className="bg-primary text-black text-center py-3 text-sm font-bold tracking-tight">
+          {amaTitle || "Ask me a question"}
+        </div>
+
+        {/* bottom */}
+        <div className="px-6 py-8 text-center">
+          <p className="text-lg md:text-xl font-semibold text-neutral-800 leading-snug">
+            {question.questionContent}
+          </p>
+        </div>
       </div>
     </div>
   );

@@ -3,8 +3,6 @@
 import { Ama, Question } from "@/schema";
 import { Badge } from "./ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
-import { cn } from "@/lib/utils";
-import { Separator } from "./ui/separator";
 import QuestionCard from "./question-card";
 
 export default function AmaInboxComp({
@@ -14,6 +12,7 @@ export default function AmaInboxComp({
   ama: Ama & { questions?: Question[] };
   username: string;
 }) {
+
   return (
     <div className="p-6 max-w-xl mx-auto space-y-6 w-full">
       {/* header */}
