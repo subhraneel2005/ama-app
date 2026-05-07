@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { authMiddleware } from "./lib/auth-middleware";
 
 export const config = {
-  matcher: ["/ama/:path*"],
+  matcher: ["/ama/:path*", "/myAmas/:path*", "/api/ama/:path*"],
 };
 
 export async function proxy(req: Request) {

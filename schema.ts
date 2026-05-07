@@ -35,9 +35,15 @@ export const userSessionTable = pgTable("session", {
 export const amaTable = pgTable("ama", {
   id: uuid().primaryKey().defaultRandom(),
   publicId: varchar({ length: 8 }).notNull().unique(),
+
   title: text(),
   link: varchar({ length: 255 }),
   ownerId: uuid().references(() => userTable.id),
+
+  createdAt: timestamp({ withTimezone: true }).defaultNow(),
+  willExpireAt: timestamp({ withTimezone: true }).$defaultFn(
+    () => new Date(Date.now() + 24 * 60 * 60 * 1000),
+  ),
 });
 
 export const moderationEnum = pgEnum("moderationCategory", [
@@ -86,7 +92,7 @@ export const questionTable = pgTable("question", {
   actorId: uuid().references(() => actorTable.id),
   amaId: uuid().references(() => amaTable.id),
 
-  createdAt: timestamp({ withTimezone: true }).defaultNow()
+  createdAt: timestamp({ withTimezone: true }).defaultNow(),
 });
 
 export const actorTable = pgTable("actor", {
@@ -101,8 +107,8 @@ export const actorTable = pgTable("actor", {
   isBanned: boolean().default(false),
 
   lastMessagedAt: timestamp({ withTimezone: true }),
-  createdAt: timestamp({ withTimezone: true }).defaultNow()
-})
+  createdAt: timestamp({ withTimezone: true }).defaultNow(),
+});
 
 export const userRelations = relations(userTable, ({ many }) => ({
   amas: many(amaTable),
@@ -143,11 +149,11 @@ export type NewUser = InferInsertModel<typeof userTable>;
 
 export type Session = InferInsertModel<typeof userSessionTable>;
 
-export type NewAma = InferInsertModel<typeof amaTable>
-export type Ama = InferSelectModel<typeof amaTable>
+export type NewAma = InferInsertModel<typeof amaTable>;
+export type Ama = InferSelectModel<typeof amaTable>;
 
-export type NewActor = InferInsertModel<typeof actorTable>
-export type Actor = InferSelectModel<typeof actorTable>
+export type NewActor = InferInsertModel<typeof actorTable>;
+export type Actor = InferSelectModel<typeof actorTable>;
 
-export type NewQuestion = InferInsertModel<typeof questionTable>
-export type Question = InferSelectModel<typeof questionTable>
+export type NewQuestion = InferInsertModel<typeof questionTable>;
+export type Question = InferSelectModel<typeof questionTable>;

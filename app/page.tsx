@@ -16,6 +16,9 @@ export default function Home() {
         <Link href={"/ama"}>
           <Button>Create AMA</Button>
         </Link>
+        <Link href={"/myAmas"}>
+          <Button>My Amas</Button>
+        </Link>
         <Link href={"/login"}>
           <Button>Login or Create an account</Button>
         </Link>

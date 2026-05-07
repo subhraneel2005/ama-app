@@ -50,6 +50,13 @@
       "when": 1777408531929,
       "tag": "0006_sleepy_albert_cleary",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1778165330372,
+      "tag": "0007_mature_doctor_doom",
+      "breakpoints": true
     }
   ]
 }

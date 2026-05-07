@@ -65,17 +65,30 @@ export async function getAmaIdFromPublicId(publicId: string) {
   }
 }
 
-export async function getAllAmaByUserId(userId: string){
+export async function getAllAmasByUserId(userId: string){
   try {
-    const amas = await db.query.amaTable.findMany({
-      where: eq(amaTable.ownerId, userId)
+    const allAmas = await db.query.amaTable.findMany({
+      where: eq(amaTable.ownerId, userId),
+      columns: {
+        id: true,
+        title: true,
+        publicId: true,
+        willExpireAt: true
+      },
+      with: {
+        questions: {
+          columns: {
+            id: true
+          }
+        }
+      }
     })
 
-    if(!amas) return null
+    if(allAmas.length === 0) return null
 
-    return amas
+    return allAmas
   } catch (error) {
-    console.error("error at finding all amas using userId");
+    console.error("error at finding all amas using userId", error);
     return null;
   }
 }

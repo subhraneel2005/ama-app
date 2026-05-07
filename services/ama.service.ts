@@ -1,7 +1,13 @@
-import { getAmaByPublicId, getAmaWithQuestionsByPublicId, insertAma } from "@/repositories/ama.repository";
+import {
+  getAllAmasByUserId,
+  getAmaByPublicId,
+  getAmaWithQuestionsByPublicId,
+  insertAma,
+} from "@/repositories/ama.repository";
 import { getSession } from "@/repositories/session.repository";
 import { Ama } from "@/schema";
 import { nanoid } from "nanoid";
+import { success } from "zod";
 import { fa } from "zod/locales";
 
 interface NewAmaProps {
@@ -86,6 +92,63 @@ export async function getAmaWithQuestionsByPublicIdService(
       success: true,
       reason: "ama found",
       ama,
+    };
+  } catch (error: any) {
+    if (error?.cause?.code === "ECONNREFUSED") {
+      return {
+        success: false,
+        reason: "dbError",
+      };
+    }
+    console.error(error);
+    return {
+      success: false,
+      reason: "general code error",
+    };
+  }
+}
+
+type GetAllAmasByUserIdResult =
+  | { success: false; reason: "no userId provided" }
+  | { success: false; reason: "dbError" }
+  | { success: false; reason: "no amas found" }
+  | { success: false; reason: "general code error" }
+  | { success: true; reason: "all amas found"; allAmas: AmaMetadata[] | null };
+
+interface AmaMetadata {
+  id: string;
+  title: string | null;
+  publicId: string;
+  willExpireAt: Date | null;
+  questions: {
+    id: string;
+  }[];
+}
+
+export async function getAllAmasByUserIdService(
+  userId: string,
+): Promise<GetAllAmasByUserIdResult> {
+  try {
+    if (!userId)
+      return {
+        success: false,
+        reason: "no userId provided",
+      };
+
+    const allAmas = await getAllAmasByUserId(userId);
+
+    console.log("all amas result: ", allAmas)
+
+    if (allAmas?.length === 0)
+      return {
+        success: false,
+        reason: "no amas found",
+      };
+
+    return {
+      success: true,
+      allAmas,
+      reason: "all amas found",
     };
   } catch (error: any) {
     if (error?.cause?.code === "ECONNREFUSED") {
