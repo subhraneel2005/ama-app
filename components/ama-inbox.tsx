@@ -24,7 +24,7 @@ export default function AmaInboxComp({
               {ama.questions?.length ?? 0} questions
             </Badge>
           </CardTitle>
-          <p className="text-sm text-muted-foreground">@{username}</p>
+          <p className="text-sm text-primary font-semibold">@{username}</p>
         </CardHeader>
       </Card>
 

@@ -59,7 +59,7 @@ export default function UserTopbar({ username, avatarUrl, email }: UserCardProps
 
       <div className="flex items-center gap-4">
         {errorMessage && (
-          <span className="text-red-500 text-sm">{errorMessage}</span>
+          <span className="text-destructive text-sm">{errorMessage}</span>
         )}
 
         <Button

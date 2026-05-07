@@ -73,7 +73,7 @@ export default function AmaClientScreen({
           anything.
         </p>
 
-        {error && <p className="text-red-500 text-sm my-4">{error}</p>}
+        {error && <p className="text-destructive text-sm my-4">{error}</p>}
 
         <Card className="w-[500px] py-12 mt-6">
           <CardContent className="flex flex-col gap-3">

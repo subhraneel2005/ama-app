@@ -4,8 +4,8 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="min-h-screen w-full justify-center items-center flex flex-col">
-      <h1 className="text-primary text-6xl tracking-tighter mb-1 font-bold flex items-center">
+    <div className="min-h-screen w-full justify-center items-center flex flex-col bg-background">
+      <h1 className="text-primary text-7xl tracking-tighter mb-1 font-bold flex items-center">
         Anonymous ama app
         
       </h1>

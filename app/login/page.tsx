@@ -28,7 +28,7 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen w-full justify-center items-center flex flex-col space-y-6">
       {errorMessage && (
-        <div className="text-red-500 bg-red-200 px-4 py-2 rounded-lg">
+        <div className="text-destructive bg-destructive/20 px-4 py-2 rounded-lg">
           {errorMessage}
         </div>
       )}

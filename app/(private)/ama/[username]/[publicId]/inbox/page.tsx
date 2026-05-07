@@ -15,8 +15,8 @@ export default async function AmaInbox({ params }: AmaSingleInboxPageProps) {
 
   if (!res.success) {
     return (
-      <div className="p-6 bg-red-400 rounded-xl border border-destructive">
-        <span className="text-xl font-semibold tracking-tighter text-red-600">
+      <div className="p-6 bg-destructive/20 rounded-xl border border-destructive">
+        <span className="text-xl font-semibold tracking-tighter text-destructive">
           {res.reason}
         </span>
       </div>

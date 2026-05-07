@@ -45,13 +45,13 @@ export default function QuestionCard({
         className="absolute right-2 top-2 z-10 p-2"
         onClick={handleCopy}
       >
-        <Copy className="w-4 h-4" />
+        <Copy className="w-4 h-4" color="black"/>
       </Button>
 
       <div
         ref={ref}
         className={cn(
-          "w-full rounded-2xl overflow-hidden shadow-sm border bg-neutral-200",
+          "w-full rounded-2xl overflow-hidden shadow-sm border bg-muted",
         )}
       >
         {/* top */}
@@ -61,7 +61,7 @@ export default function QuestionCard({
 
         {/* bottom */}
         <div className="px-6 py-8 text-center">
-          <p className="text-lg md:text-xl font-semibold text-neutral-800 leading-snug">
+          <p className="text-lg md:text-xl font-semibold text-foreground leading-snug">
             {question.questionContent}
           </p>
         </div>
