@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import { GeistSans } from 'geist/font/sans';
-import { GeistPixelSquare } from 'geist/font/pixel';
+import { GeistSans } from "geist/font/sans";
+import { GeistPixelSquare } from "geist/font/pixel";
 
 import "./globals.css";
 import { cn } from "@/lib/utils";
-
+import MinecraftStars from "@/components/minecraft-stars";
 
 export const metadata: Metadata = {
   title: "ama app",
@@ -21,7 +21,10 @@ export default function RootLayout({
       lang="en"
       className={cn("h-full", "antialiased", GeistPixelSquare.className)}
     >
-      <body className="min-h-full flex flex-col dark">{children}</body>
+      <body className="min-h-full flex flex-col dark bg-[#090b1a] relative overflow-x-hidden">
+        <MinecraftStars />
+        {children}
+      </body>
     </html>
   );
 }
