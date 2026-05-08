@@ -55,13 +55,13 @@ export default function QuestionCard({
         )}
       >
         {/* top */}
-        <div className="bg-primary text-black text-center py-3 text-sm font-bold tracking-tight">
+        <div className="bg-primary text-background text-center py-3 text-md font-medium">
           {amaTitle || "Ask me a question"}
         </div>
 
         {/* bottom */}
         <div className="px-6 py-8 text-center">
-          <p className="text-lg md:text-xl font-semibold text-foreground leading-snug">
+          <p className="text-lg md:text-xl font-medium text-foreground leading-snug">
             {question.questionContent}
           </p>
         </div>

@@ -10,6 +10,8 @@ import Link from "next/link";
 import { getDeviceAndIp } from "@/lib/get-device-and-ip";
 import { createIpHash } from "@/lib/create-ip-hash";
 import { useRouter } from "next/navigation";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { SentIcon } from "@hugeicons/core-free-icons";
 
 interface AmaPageProps {
   username: string;
@@ -31,6 +33,8 @@ export default function AmaPage({
   const [isFocused, setIsFocused] = useState(false);
   const [message, setMessage] = useState("");
   const [copied, setCopied] = useState(false);
+  const [isSending, setIsSending] = useState(false);
+  const [sent, setSent] = useState(false);
 
   const shouldHideFooter = isFocused || message.length > 0;
 
@@ -46,56 +50,72 @@ export default function AmaPage({
   };
 
   const handleSend = async () => {
-    const { deviceID, ip } = await getDeviceAndIp();
-    const ipHash = await createIpHash(ip);
-    console.log("device id: ", deviceID);
-    console.log("ip: ", ip);
-    console.log("ipHash: ", ipHash);
+    if (!message.trim()) return;
 
-    const res = await fetch("/api/actor/update", {
-      method: "POST",
-    });
+    setIsSending(true);
 
-    const actorResult = await res.json();
+    try {
+      const { deviceID, ip } = await getDeviceAndIp();
+      const ipHash = await createIpHash(ip);
+      console.log("device id: ", deviceID);
+      console.log("ip: ", ip);
+      console.log("ipHash: ", ipHash);
 
-    if (
-      actorResult.success === false &&
-      actorResult.reason === "no actor found"
-    ) {
-      // no actor found which means, getActor() already checked with both sessionToken and anonId in the cookies
-      // and haven't found any actor in the database so here we need to create a new actor using the createActor() service
-
-      const createRes = await fetch("/api/actor/create", {
+      const res = await fetch("/api/actor/update", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+      });
+
+      const actorResult = await res.json();
+
+      if (
+        actorResult.success === false &&
+        actorResult.reason === "no actor found"
+      ) {
+        // no actor found which means, getActor() already checked with both sessionToken and anonId in the cookies
+        // and haven't found any actor in the database so here we need to create a new actor using the createActor() service
+
+        const createRes = await fetch("/api/actor/create", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            deviceID,
+            ipHash,
+          }),
+        });
+
+        const newActor = await createRes.json();
+
+        if (createRes.status === 201 && newActor.success) {
+          console.log("new actor created successfully", newActor.actor);
+        } else {
+          console.error("failed to create actor");
+        }
+      }
+
+      const newQuestionRes = await fetch("/api/question/create", {
+        method: "POST",
         body: JSON.stringify({
-          deviceID,
-          ipHash,
+          questionContent: message,
+          amaPublicId: publicId,
         }),
       });
 
-      const newActor = await createRes.json();
+      const result = await newQuestionRes.json();
 
-      if (createRes.status === 201 && newActor.success) {
-        console.log("new actor created successfully", newActor.actor);
-      } else {
-        console.error("failed to create actor");
+      if (result.success) {
+        setSent(true);
+        
+        setTimeout(() => {
+          setSent(false);
+        }, 2500);
       }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsSending(false);
     }
-
-    const newQuestionRes = await fetch("/api/question/create", {
-      method: "POST",
-      body: JSON.stringify({
-        questionContent: message,
-        amaPublicId: publicId,
-      }),
-    });
-
-    const result = await newQuestionRes.json();
-
-    console.log(result);
   };
 
   const router = useRouter();
@@ -103,8 +123,8 @@ export default function AmaPage({
   const inboxUrl = `/ama/${username}/${publicId}/inbox`;
 
   return (
-    <div className="min-h-screen bg-background flex flex-col items-center py-12 px-4 transition-all">
-      <Card className="w-full max-w-3xl rounded-4xloverflow-hidden border shadow-sm">
+    <div className="min-h-screen flex flex-col items-center py-12 px-4 transition-all">
+      <Card className="w-full border border-border bg-background max-w-3xl rounded-4xl overflow-hidden shadow-sm">
         <CardHeader className="flex flex-row items-center gap-3 p-8 pb-4">
           <Avatar className="h-12 w-12 border">
             <AvatarImage src={avatarUrl} />
@@ -133,20 +153,24 @@ export default function AmaPage({
           />
 
           <div className="flex items-center gap-3 mt-4 justify-between">
-            <Button
-              size="icon"
-              variant="secondary"
-              className="rounded-full h-12 w-12 text-xl shadow-sm border hover:bg-secondary/80 transition-colors"
-            >
-              🎲
-            </Button>
             {message.length > 0 && !isOwner && (
-              <Button
-                onClick={handleSend}
-                className="rounded-full bg-primary hover:bg-primary/90 font-semibold"
-              >
-                Send <Send className="h-4 w-4" />
-              </Button>
+              <div className="flex items-center gap-3">
+                <Button
+                  disabled={isSending}
+                  onClick={handleSend}
+                  className="rounded-full bg-primary hover:bg-primary/90 font-normal"
+                >
+                  {isSending ? "Sending..." : "Ask"}
+
+                  <HugeiconsIcon icon={SentIcon} strokeWidth={2} />
+                </Button>
+
+                {sent && (
+                  <p className="text-sm text-green-500 animate-in fade-in">
+                    sent successfully
+                  </p>
+                )}
+              </div>
             )}
           </div>
         </CardContent>
@@ -166,13 +190,9 @@ export default function AmaPage({
 
       {!shouldHideFooter && !isOwner && (
         <div className="w-full flex flex-col items-center animate-in fade-in slide-in-from-bottom-4 duration-500">
-          <p className="font-semibold mt-10 text-center">
-            👇 999 friends just tapped the button 👇
-          </p>
-
           <Button
             asChild
-            className="mt-6 w-full max-w-3xl h-16 rounded-full text-lg font-bold shadow-xl"
+            className="mt-6 w-full max-w-3xl h-16 rounded-full text-lg font-medium shadow-xl"
           >
             <Link href="/ama">Get your own messages!</Link>
           </Button>

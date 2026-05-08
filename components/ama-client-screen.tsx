@@ -9,6 +9,13 @@ import { Card, CardContent } from "./ui/card";
 import { Button } from "./ui/button";
 import { createAma } from "@/services/ama.service";
 import { useRouter } from "next/navigation";
+import { HugeiconsIcon } from "@hugeicons/react";
+import {
+  ChatAdd01Icon,
+  ChatPreview01FreeIcons,
+  Comment02FreeIcons,
+  Comment02Icon,
+} from "@hugeicons/core-free-icons";
 
 export default function AmaClientScreen({
   username,
@@ -19,7 +26,7 @@ export default function AmaClientScreen({
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const router = useRouter()
+  const router = useRouter();
 
   const ceateAmaHandler = async () => {
     if (amaTitle.trim().length === 0) {
@@ -49,9 +56,9 @@ export default function AmaClientScreen({
 
       console.log("new ama created: ", data.data.data);
 
-      const publicId = data.data.data.publicId
+      const publicId = data.data.data.publicId;
 
-      router.push(`/ask/${username.toLowerCase()}/${publicId}`)
+      router.push(`/ask/${username.toLowerCase()}/${publicId}`);
     } catch (err) {
       setError("Something went wrong");
     } finally {
@@ -64,11 +71,14 @@ export default function AmaClientScreen({
       <UserTopbar username={username} avatarUrl={avatarUrl} email={email} />
 
       <div className="flex-1 flex flex-col items-center justify-center space-y-6">
-        <h1 className="text-primary text-6xl tracking-tighter mb-1 font-bold">
-          Create your AMA
+        <h1 className="text-foreground text-6xl tracking-tighter mb-1 font-bold gap-4">
+          Create your{" "}
+          <span className="inline-block px-4 py-2 bg-primary text-background rounded-xl italic">
+            AMA !
+          </span>
         </h1>
 
-        <p className="text-muted-foreground tracking-tighter text-xl mb-4">
+        <p className="text-muted-foreground tracking-tighter text-xl mb-4 mt-2">
           Start an anonymous AMA, share your link, and let people ask you
           anything.
         </p>
@@ -84,10 +94,14 @@ export default function AmaClientScreen({
               onChange={(e) => setAmaTitle(e.target.value)}
             />
             <Link href="/ama/preview" className="w-full mt-6">
-              <Button className="w-full">Preview</Button>
+              <Button className="w-full">
+                Preview
+                <HugeiconsIcon icon={ChatPreview01FreeIcons} strokeWidth={2} />
+              </Button>
             </Link>
             <Button onClick={ceateAmaHandler} disabled={loading}>
-              {loading ? "Creating..." : "Create!"}
+              {loading ? "Creating..." : "Create"}
+              <HugeiconsIcon icon={ChatAdd01Icon} strokeWidth={2} />
             </Button>
           </CardContent>
         </Card>

@@ -16,7 +16,6 @@ export default function AmasPageClient(username: { username: string }) {
   const [amas, setAmas] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
-
   useEffect(() => {
     const fetchAmas = async () => {
       try {
@@ -38,45 +37,63 @@ export default function AmasPageClient(username: { username: string }) {
   }
 
   return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 p-4">
-      {amas.map((ama: any) => {
-        const isExpired = new Date() > new Date(ama.willExpireAt);
-        const questionCount = ama.questions?.length ?? 0;
+    <div className="min-h-screen w-full flex justify-center items-center flex-col">
+      <div className="mb-6">
+        <h2 className="text-5xl md:text-7xl font-bold tracking-tight flex items-center gap-4">
+          <span>Your</span>
 
-        return (
-          <Link key={ama.id} href={`/ask/${username.username.toLowerCase()}/${ama?.publicId}`}>
-            <Card
-              className={
-                isExpired
-                  ? "opacity-60 pointer-events-none"
-                  : "cursor-pointer hover:shadow-md transition"
-              }
-            >
-              <CardHeader>
-                <CardTitle className="text-lg font-bold">{ama.title}</CardTitle>
-              </CardHeader>
+          <span className="inline-block p-2 bg-primary text-background rounded-xl italic">
+            ama(s)
+          </span>
+        </h2>
 
-              <CardContent className="space-y-2">
-                <div className="text-sm text-muted-foreground">
-                  Public ID: {ama.publicId}
-                </div>
+        <p className="text-muted-foreground text-xl mt-4">
+          Manage and view all your ama sessions.
+        </p>
+      </div>
 
-                <div className="text-sm">
-                  Expires: {format(new Date(ama.willExpireAt), "PPP p")}
-                </div>
-              </CardContent>
+      <div className="grid gap-4 w-full max-w-6xl px-4 md:grid-cols-2 grid-cols-1 mt-4">
+        {amas.map((ama: any) => {
+          const isExpired = new Date() > new Date(ama.willExpireAt);
+          const questionCount = ama.questions?.length ?? 0;
 
-              <CardFooter className="flex gap-2">
-                <Badge variant={isExpired ? "destructive" : "default"}>
-                  {isExpired ? "Expired" : "Active"}
-                </Badge>
+          return (
+            <Link
+  key={ama.id}
+  href={`/ask/${username.username.toLowerCase()}/${ama?.publicId}`}
+  className="relative w-full"
+>
+  <Card className="w-full rounded-2xl overflow-hidden shadow-sm border pt-0 gap-0">
 
-                <Badge variant="secondary">{questionCount} Questions</Badge>
-              </CardFooter>
-            </Card>
-          </Link>
-        );
-      })}
+    <div className="bg-primary text-black text-center py-3 text-xl font-medium tracking-tight">
+      {ama.title}
+    </div>
+
+    {/* bottom */}
+    <CardContent className="px-6 py-6 space-y-3">
+      <div className="text-sm text-muted-foreground">
+        Public ID: {ama.publicId}
+      </div>
+
+      <div className="text-sm">
+        Expires: {format(new Date(ama.willExpireAt), "PPP p")}
+      </div>
+    </CardContent>
+
+    <CardFooter className="flex gap-2 px-6 pb-6 pt-0">
+      <Badge variant={isExpired ? "destructive" : "default"}>
+        {isExpired ? "Expired" : "Active"}
+      </Badge>
+
+      <Badge variant="secondary">
+        {questionCount} Questions
+      </Badge>
+    </CardFooter>
+  </Card>
+</Link>
+          );
+        })}
+      </div>
     </div>
   );
 }

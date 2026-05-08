@@ -19,14 +19,8 @@ export default function MinecraftStars() {
 
   return (
     <Particles
-      className="fixed inset-0 -z-10"
+      className="fixed inset-0 -z-10 bg-background"
       options={{
-        background: {
-          color: {
-            value: "#090b1a",
-          },
-        },
-
         fpsLimit: 60,
 
         particles: {

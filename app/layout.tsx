@@ -19,10 +19,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={cn("h-full", "antialiased", GeistPixelSquare.className)}
+      className={cn("h-full", "antialiased")}
     >
-      <body className="min-h-full flex flex-col dark bg-[#090b1a] relative overflow-x-hidden">
-        <MinecraftStars />
+      <body className="min-h-full flex flex-col dark overflow-x-hidden">
         {children}
       </body>
     </html>
